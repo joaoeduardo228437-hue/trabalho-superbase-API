@@ -1,9 +1,25 @@
-CREATE TABLE filme (
-    id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
-    nome text NOT NULL,
-    genero text NOT NULL,
-    ano int4 NOT NULL,
-    nota numeric NOT NULL
-);
+import { createClient } from '@supabase/supabase-js';
 
-ALTER TABLE filme DISABLE ROW LEVEL SECURITY;
+// Configurações de acesso ao Supabase
+const supabaseUrl = 'https://ebymlmkgpusqhhsiewdj.supabase.co';
+const supabaseKey = 'sb_publishable_m2RRciqOWfSrY8lQ8afmjA_ydWXYlrI';
+
+// Inicializa o cliente do Supabase
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+// Função para buscar e exibir os filmes
+async function buscarFilmes() {
+  const { data: filmes, error } = await supabase
+    .from('filme')
+    .select('*');
+
+  if (error) {
+    console.error('Erro ao buscar filmes:', error.message);
+    return;
+  }
+
+  console.log('--- Lista de Filmes ---');
+  console.log(filmes);
+}
+
+buscarFilmes();
